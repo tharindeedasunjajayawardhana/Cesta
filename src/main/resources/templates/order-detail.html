@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details | Cesta Basket</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header class="customer-header customer-header-wide">
+    <div class="brand">Cesta Basket</div>
+    <nav>
+        <a th:href="@{/}">Home</a>
+        <span>|</span>
+        <a th:href="@{/account}">My Account</a>
+    </nav>
+</header>
+
+<main class="order-detail-container">
+    <p><a th:href="@{/orders}" class="order-back-link">← Back to My Orders</a></p>
+
+    <section class="order-detail-card">
+        <h1>Order #<span th:text="${order.id}">1</span></h1>
+        <p>
+            <span class="muted">Status:</span>
+            <span class="status" th:text="${order.status}">PLACED</span>
+        </p>
+        <p>
+            <span class="muted">Order date:</span>
+            <span th:text="${order.createdAt}">Order date</span>
+        </p>
+        <p>
+            <span class="muted">Payment method:</span>
+            <span th:text="${order.paymentMethod}">CASH_ON_DELIVERY</span>
+        </p>
+    </section>
+
+    <section class="order-detail-card">
+        <h2>Items Ordered</h2>
+
+        <div class="order-table-wrapper">
+            <table class="order-table">
+                <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th class="amount">Unit Price</th>
+                    <th class="amount">Subtotal</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item : ${order.items}">
+                    <td th:text="${item.productName}">Product name</td>
+                    <td th:text="${item.quantity}">1</td>
+                    <td class="amount">
+                        Rs. <span th:text="${item.unitPrice}">0.00</span>
+                    </td>
+                    <td class="amount">
+                        Rs. <span th:text="${item.lineTotal}">0.00</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="order-summary">
+            <div class="order-summary-row">
+                <span>Subtotal</span>
+                <span>Rs. <span th:text="${order.subtotal}">0.00</span></span>
+            </div>
+            <div class="order-summary-row grand-total">
+                <span>Total</span>
+                <span>Rs. <span th:text="${order.total}">0.00</span></span>
+            </div>
+        </div>
+    </section>
+
+    <section class="order-detail-card">
+        <h2>Delivery Details</h2>
+        <p><strong>Name:</strong> <span th:text="${order.deliveryName}">Customer name</span></p>
+        <p><strong>Phone:</strong> <span th:text="${order.deliveryPhone}">Phone number</span></p>
+        <p><strong>Address:</strong> <span th:text="${order.deliveryAddress}">Delivery address</span></p>
+        <p><strong>City:</strong> <span th:text="${order.city}">City</span></p>
+        <p><strong>Postal code:</strong> <span th:text="${order.postalCode}">Postal code</span></p>
+    </section>
+
+    <p><a class="customer-button" th:href="@{/orders}">Back to My Orders</a></p>
+</main>
+
+</body>
+</html>

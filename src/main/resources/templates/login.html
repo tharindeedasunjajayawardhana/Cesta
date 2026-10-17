@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | Cesta Basket</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body class="login-page">
+
+<header class="customer-header">
+    <a th:href="@{/}" class="brand">Cesta Basket</a>
+</header>
+
+<main class="auth-container">
+
+    <h1>Welcome back</h1>
+
+    <p class="auth-subtitle">
+        Log in to your Cesta Basket account.
+    </p>
+
+    <div th:if="${successMessage}"
+         class="auth-message success"
+         th:text="${successMessage}">
+    </div>
+
+    <div th:if="${errorMessage}"
+         class="auth-message failure"
+         th:text="${errorMessage}">
+    </div>
+
+    <form th:action="@{/login}"
+          th:object="${loginForm}"
+          method="post">
+
+        <label for="email">Email address</label>
+
+        <input
+            id="email"
+            type="email"
+            th:field="*{email}"
+            autocomplete="email"
+            placeholder="you@example.com"
+            required
+        >
+
+        <div class="auth-error"
+             th:if="${#fields.hasErrors('email')}"
+             th:errors="*{email}">
+        </div>
+
+        <label for="password">Password</label>
+
+        <input
+            id="password"
+            type="password"
+            th:field="*{password}"
+            autocomplete="current-password"
+            placeholder="Enter your password"
+            required
+        >
+
+        <div class="auth-error"
+             th:if="${#fields.hasErrors('password')}"
+             th:errors="*{password}">
+        </div>
+
+        <button type="submit" class="auth-button">
+            Log In
+        </button>
+
+    </form>
+
+    <p class="auth-footer">
+        Don't have an account?
+        <a th:href="@{/register}">Create one</a>
+    </p>
+
+    <p class="auth-footer home-link">
+        <a th:href="@{/}">Back to home</a>
+    </p>
+
+</main>
+
+</body>
+</html>

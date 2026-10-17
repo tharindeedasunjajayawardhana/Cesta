@@ -1,0 +1,121 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cesta | Product Management</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header class="site-header">
+    <div class="navbar">
+        <a href="/" class="logo">
+            <span class="logo-icon">🧺</span>
+            <span>Cesta<span class="logo-dot">.</span></span>
+        </a>
+        <a href="/" class="nav-shop-button">View Store</a>
+    </div>
+</header>
+
+<main class="admin-page">
+    <div class="admin-heading">
+        <div>
+            <p class="eyebrow">CESTA STORE MANAGEMENT</p>
+            <h1>Product inventory</h1>
+            <p>Manage your grocery products, prices and stock.</p>
+        </div>
+
+        <a th:href="@{/admin/products/new}" class="primary-button">
+            + Add product
+        </a>
+    </div>
+
+    <p class="admin-success"
+       th:if="${successMessage}"
+       th:text="${successMessage}"></p>
+
+    <div class="admin-table-wrapper">
+        <table class="admin-table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Original price</th>
+                <th>Stock</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="product : ${products}">
+                <td th:text="${product.id}">1</td>
+
+                <td>
+                    <span class="admin-product-name">
+                        <span th:text="${product.imageEmoji}">🥑</span>
+                        <span th:text="${product.name}">Fresh Avocado</span>
+                    </span>
+                </td>
+
+                <td th:text="${product.category}">Fruits</td>
+
+                <td th:text="${'Rs. ' + #numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')}">
+                    Rs. 350.00
+                </td>
+
+                <td>
+                    <span th:if="${product.originalPrice != null}"
+                          th:text="${'Rs. ' + #numbers.formatDecimal(product.originalPrice, 1, 'COMMA', 2, 'POINT')}">
+                        Rs. 400.00
+                    </span>
+                    <span th:unless="${product.originalPrice != null}">—</span>
+                </td>
+
+                <td th:text="${product.stockQuantity}">25</td>
+
+                <td>
+                    <span th:if="${product.active}" class="status-active">
+                        Active
+                    </span>
+                    <span th:unless="${product.active}" class="status-inactive">
+                        Inactive
+                    </span>
+                </td>
+
+                <td>
+                    <div class="admin-actions">
+                        <a class="admin-edit"
+                           th:href="@{/admin/products/edit/{id}(id=${product.id})}">
+                            Edit
+                        </a>
+
+                        <form th:action="@{/admin/products/delete/{id}(id=${product.id})}"
+                              method="post"
+                              onsubmit="return confirm('Delete this product?');">
+                            <button class="admin-delete" type="submit">
+                                Delete
+                            </button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+
+            <tr th:if="${#lists.isEmpty(products)}">
+                <td colspan="8" class="admin-empty">
+                    No products found. Add your first product to get started.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <a href="/" class="admin-back-link">← Back to storefront</a>
+</main>
+
+</body>
+</html>

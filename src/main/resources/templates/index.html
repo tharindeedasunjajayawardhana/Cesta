@@ -1,0 +1,423 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cesta | Fresh Groceries, Delivered with Care</title>
+
+    <meta name="description"
+          content="Shop fresh fruits, vegetables, dairy and everyday groceries at Cesta.">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<!-- ==================== NAVBAR ==================== -->
+<header class="site-header">
+    <div class="navbar">
+
+        <a href="/" class="logo">
+            <span class="logo-icon">🧺</span>
+            <span>Cesta<span class="logo-dot">.</span></span>
+        </a>
+
+        <nav class="main-nav">
+            <a href="/">Home</a>
+            <a href="#categories">Categories</a>
+            <a href="#products">Shop</a>
+            <a href="#deals">Deals <span class="nav-deal">SALE</span></a>
+        </nav>
+
+        <div class="nav-actions">
+            <a href="/cart" class="nav-shop-button">My Cart</a>
+            <a href="#products" class="nav-shop-button">Shop now</a>
+        </div>
+
+    </div>
+</header>
+
+<main>
+
+    <!-- ==================== HERO ==================== -->
+    <section class="hero">
+        <div class="hero-content">
+
+            <p class="eyebrow">FRESHNESS AT YOUR DOORSTEP</p>
+
+            <h1>
+                Good food.<br>
+                <span>Good mood.</span>
+            </h1>
+
+            <p class="hero-description">
+                Discover fresh produce, everyday essentials and
+                delicious goodness for your home, all in one basket.
+            </p>
+
+            <div class="hero-actions">
+                <a href="#products" class="primary-button">
+                    Explore products →
+                </a>
+
+                <a href="#categories" class="secondary-button">
+                    Browse categories
+                </a>
+            </div>
+
+            <div class="hero-trust">
+                <span>✓ Fresh selections</span>
+                <span>✓ Everyday essentials</span>
+            </div>
+
+        </div>
+
+        <div class="hero-visual">
+            <div class="hero-circle">
+                <span class="hero-emoji">🥑</span>
+                <span class="floating-fruit fruit-one">🍎</span>
+                <span class="floating-fruit fruit-two">🍊</span>
+                <span class="floating-fruit fruit-three">🥬</span>
+                <span class="floating-fruit fruit-four">🍌</span>
+            </div>
+
+            <div class="hero-note">
+                <span class="note-icon">🌿</span>
+                <div>
+                    <strong>A little more goodness</strong>
+                    <p>For your everyday table</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== BENEFITS ==================== -->
+    <section class="benefits">
+
+        <div class="benefit-item">
+            <span class="benefit-icon">🥬</span>
+            <div>
+                <h3>Fresh choices</h3>
+                <p>Everyday grocery favourites</p>
+            </div>
+        </div>
+
+        <div class="benefit-item">
+            <span class="benefit-icon">🧺</span>
+            <div>
+                <h3>Easy shopping</h3>
+                <p>Your essentials in one place</p>
+            </div>
+        </div>
+
+        <div class="benefit-item">
+            <span class="benefit-icon">💚</span>
+            <div>
+                <h3>Made for your home</h3>
+                <p>Goodness for everyday living</p>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- ==================== CATEGORIES ==================== -->
+    <section class="categories-section" id="categories">
+
+        <div class="section-heading">
+            <p class="eyebrow">FIND YOUR FAVOURITES</p>
+            <h2>Shop by category</h2>
+            <p>Everything you need for a well-stocked kitchen.</p>
+        </div>
+
+        <div class="category-grid">
+
+            <a href="#products" class="category-card">
+                <div class="category-image category-fruits">🍎</div>
+                <h3>Fruits</h3>
+                <p>Sweet natural goodness</p>
+            </a>
+
+            <a href="#products" class="category-card">
+                <div class="category-image category-vegetables">🥦</div>
+                <h3>Vegetables</h3>
+                <p>Fresh everyday greens</p>
+            </a>
+
+            <a href="#products" class="category-card">
+                <div class="category-image category-dairy">🥛</div>
+                <h3>Dairy &amp; Eggs</h3>
+                <p>Everyday essentials</p>
+            </a>
+
+            <a href="#products" class="category-card">
+                <div class="category-image category-bakery">🍞</div>
+                <h3>Bakery</h3>
+                <p>Comfort in every bite</p>
+            </a>
+
+        </div>
+    </section>
+
+    <!-- ==================== PRODUCTS ==================== -->
+    <section class="products-section" id="products">
+
+        <div class="section-heading">
+            <p class="eyebrow">FRESH PICKS FOR YOU</p>
+            <h2>Our fresh products</h2>
+            <p>Everyday essentials, all in one place.</p>
+        </div>
+
+        <div class="product-grid">
+
+            <article class="product-card"
+                     th:each="product : ${products}">
+
+                <div class="product-image">
+
+                    <img th:if="${product.imagePath != null and !product.imagePath.isEmpty()}"
+                         th:src="${product.imagePath}"
+                         th:alt="${product.name}"
+                         class="product-photo">
+
+                    <span th:unless="${product.imagePath != null and !product.imagePath.isEmpty()}"
+                          th:text="${product.imageEmoji}">🥑</span>
+
+                </div>
+
+                <div class="product-info">
+
+                    <p class="product-category"
+                       th:text="${product.category}">Fruits</p>
+
+                    <h3 th:text="${product.name}">Fresh Avocado</h3>
+
+                    <p class="product-description"
+                       th:text="${product.description}">
+                        Fresh and delicious.
+                    </p>
+
+                    <div class="product-price">
+
+                        <span class="current-price"
+                              th:text="${'Rs. ' + #numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')}">
+                            Rs. 350.00
+                        </span>
+
+                        <span class="old-price"
+                              th:if="${product.originalPrice != null and product.originalPrice.compareTo(product.price) > 0}"
+                              th:text="${'Rs. ' + #numbers.formatDecimal(product.originalPrice, 1, 'COMMA', 2, 'POINT')}">
+                            Rs. 400.00
+                        </span>
+
+                    </div>
+
+                    <!-- WORKING ADD TO CART FORM -->
+                    <form th:action="@{/cart/add}" method="post">
+
+                        <input type="hidden"
+                               name="productId"
+                               th:value="${product.id}">
+
+                        <input type="number"
+                               name="quantity"
+                               value="1"
+                               min="1"
+                               max="99"
+                               aria-label="Quantity">
+
+                        <button class="add-to-cart" type="submit">
+                            Add to cart
+                        </button>
+
+                    </form>
+
+                </div>
+            </article>
+
+        </div>
+
+        <p class="empty-message"
+           th:if="${#lists.isEmpty(products)}">
+            No products are available right now. Please check back soon.
+        </p>
+
+    </section>
+
+    <!-- ==================== DEALS ==================== -->
+    <section class="deals-section" id="deals">
+
+        <div class="deals-banner">
+
+            <div class="deals-banner-content">
+                <p class="eyebrow">A LITTLE EXTRA GOODNESS</p>
+
+                <h2>Good finds. <span>Better prices.</span></h2>
+
+                <p>
+                    Explore selected grocery deals and bring home
+                    more of what you love.
+                </p>
+
+                <a href="#deal-products" class="primary-button">
+                    Explore deals →
+                </a>
+            </div>
+
+            <div class="deals-banner-art">
+                <span>🛍️</span>
+                <span class="deal-art-fruit">🍎</span>
+            </div>
+
+        </div>
+
+        <div class="section-heading deals-heading" id="deal-products">
+            <p class="eyebrow">WORTH A LOOK</p>
+            <h2>This week's deals</h2>
+            <p>Enjoy selected products at special prices.</p>
+        </div>
+
+        <div class="deal-grid">
+
+            <article class="deal-card"
+                     th:each="product : ${deals}">
+
+                <span class="deal-badge">SPECIAL OFFER</span>
+
+                <div class="deal-image">
+
+                    <img th:if="${product.imagePath != null and !product.imagePath.isEmpty()}"
+                         th:src="${product.imagePath}"
+                         th:alt="${product.name}"
+                         class="product-photo">
+
+                    <span th:unless="${product.imagePath != null and !product.imagePath.isEmpty()}"
+                          th:text="${product.imageEmoji}">🍎</span>
+
+                </div>
+
+                <h3 th:text="${product.name}">Red Apples</h3>
+
+                <p class="product-category"
+                   th:text="${product.category}">Fruits</p>
+
+                <div class="deal-prices">
+
+                    <span class="current-price"
+                          th:text="${'Rs. ' + #numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')}">
+                        Rs. 384.00
+                    </span>
+
+                    <span class="old-price"
+                          th:if="${product.originalPrice != null and product.originalPrice.compareTo(product.price) > 0}"
+                          th:text="${'Rs. ' + #numbers.formatDecimal(product.originalPrice, 1, 'COMMA', 2, 'POINT')}">
+                        Rs. 480.00
+                    </span>
+
+                </div>
+
+                <!-- WORKING ADD TO CART FORM -->
+                <form th:action="@{/cart/add}" method="post">
+
+                    <input type="hidden"
+                           name="productId"
+                           th:value="${product.id}">
+
+                    <input type="number"
+                           name="quantity"
+                           value="1"
+                           min="1"
+                           max="99"
+                           aria-label="Quantity">
+
+                    <button class="add-to-cart" type="submit">
+                        Add to cart
+                    </button>
+
+                </form>
+
+            </article>
+
+        </div>
+
+        <p class="empty-message"
+           th:if="${#lists.isEmpty(deals)}">
+            No special offers are available right now.
+        </p>
+
+    </section>
+
+    <!-- ==================== CALL TO ACTION ==================== -->
+    <section class="closing-section">
+
+        <div class="closing-content">
+            <span class="closing-icon">🌱</span>
+
+            <h2>Make room for more goodness.</h2>
+
+            <p>
+                Fill your basket with everyday favourites
+                and make home feel a little more special.
+            </p>
+
+            <a href="#products" class="primary-button">
+                Start shopping →
+            </a>
+        </div>
+
+    </section>
+
+</main>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="site-footer">
+
+    <div class="footer-main">
+
+        <div class="footer-brand">
+
+            <a href="/" class="logo">
+                <span class="logo-icon">🧺</span>
+                <span>Cesta<span class="logo-dot">.</span></span>
+            </a>
+
+            <p>
+                Fresh finds and everyday essentials
+                for a happier home.
+            </p>
+
+        </div>
+
+        <div class="footer-links">
+            <h3>Explore</h3>
+            <a href="#categories">Categories</a>
+            <a href="#products">Shop products</a>
+            <a href="#deals">Special deals</a>
+            <a href="/cart">My Cart</a>
+        </div>
+
+        <div class="footer-links">
+            <h3>About Cesta</h3>
+            <p>Everyday shopping, made simpler.</p>
+            <p>Sri Lanka</p>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+
+        <p>
+            © <span th:text="${#dates.year(#dates.createNow())}">2026</span>
+            Cesta. All rights reserved.
+        </p>
+
+        <p>Made with 💚 for your everyday table.</p>
+
+    </div>
+
+</footer>
+
+</body>
+</html>

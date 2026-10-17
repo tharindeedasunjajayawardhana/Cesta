@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmed | Cesta Basket</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header class="site-header">
+    <div class="navbar">
+        <a th:href="@{/}" class="logo">
+            <span class="logo-icon">🧺</span>
+            <span>Cesta<span class="logo-dot">.</span></span>
+        </a>
+    </div>
+</header>
+
+<main class="confirmation-page">
+    <section class="confirmation-card">
+        <div class="success-icon">✓</div>
+        <h1>Thank you for your order!</h1>
+        <p>Your order has been placed successfully. Thank you for shopping with Cesta.</p>
+
+        <div class="confirmation-details">
+            <p>
+                <span>Order number</span>
+                <strong th:text="${'#' + order.id}">#1001</strong>
+            </p>
+            <p>
+                <span>Order status</span>
+                <strong th:text="${order.status}">PLACED</strong>
+            </p>
+            <p>
+                <span>Payment method</span>
+                <strong>Cash on Delivery</strong>
+            </p>
+            <p>
+                <span>Deliver to</span>
+                <strong th:text="${order.deliveryName}">Customer</strong>
+            </p>
+            <p>
+                <span>Delivery address</span>
+                <strong>
+                    <span th:text="${order.deliveryAddress}">Address</span>,
+                    <span th:text="${order.deliveryCity}">City</span>
+                </strong>
+            </p>
+            <p class="confirmation-total">
+                <span>Order total</span>
+                <span>
+                    Rs.
+                    <span th:text="${#numbers.formatDecimal(order.total, 1, 'COMMA', 2, 'POINT')}">0.00</span>
+                </span>
+            </p>
+        </div>
+
+        <p>Please keep your order number for reference.</p>
+        <a th:href="@{/}" class="confirmation-button">Continue Shopping</a>
+        <a th:href="@{/orders}" class="confirmation-button secondary">My Orders</a>
+    </section>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders | Cesta Basket</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header class="customer-header customer-header-wide">
+    <div class="brand">Cesta Basket</div>
+    <nav>
+        <a th:href="@{/}">Home</a>
+        <span>|</span>
+        <a th:href="@{/account}">My Account</a>
+    </nav>
+</header>
+
+<main class="orders-container">
+    <h1>My Orders</h1>
+    <p class="orders-subtitle">View your purchases and track their status.</p>
+
+    <div th:if="${#lists.isEmpty(orders)}" class="orders-empty">
+        <h2>No orders yet</h2>
+        <p>You haven't placed any orders with Cesta Basket yet.</p>
+        <a class="customer-button" th:href="@{/}">Start Shopping</a>
+    </div>
+
+    <article th:each="order : ${orders}" class="order-card">
+        <div class="order-top">
+            <div>
+                <strong>Order #<span th:text="${order.id}">1</span></strong>
+                <p class="muted">
+                    Placed: <span th:text="${order.createdAt}">Order date</span>
+                </p>
+            </div>
+            <div>
+                <span class="status" th:text="${order.status}">PLACED</span>
+            </div>
+        </div>
+
+        <div class="order-bottom">
+            <div>
+                <div class="muted">Order total</div>
+                <div class="order-total">
+                    Rs. <span th:text="${order.total}">0.00</span>
+                </div>
+            </div>
+
+            <a class="customer-button"
+               th:href="@{/orders/{id}(id=${order.id})}">
+                View Details
+            </a>
+        </div>
+    </article>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle} + ' | Cesta'">Product Form | Cesta</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header class="site-header">
+    <div class="navbar">
+        <a href="/" class="logo">
+            <span class="logo-icon">🧺</span>
+            <span>Cesta<span class="logo-dot">.</span></span>
+        </a>
+
+        <a th:href="@{/admin/products}" class="nav-shop-button">
+            Back to Inventory
+        </a>
+    </div>
+</header>
+
+<main class="admin-page">
+
+    <div class="admin-heading">
+        <div>
+            <p class="eyebrow">CESTA STORE MANAGEMENT</p>
+            <h1 th:text="${pageTitle}">Add Product</h1>
+            <p>Enter the product details below.</p>
+        </div>
+    </div>
+
+    <form class="admin-product-form"
+          th:action="@{/admin/products/save}"
+          th:object="${product}"
+          method="post"
+          enctype="multipart/form-data">
+
+        <input type="hidden" th:field="*{id}">
+
+        <div class="admin-form-grid">
+
+            <!-- Product Name -->
+            <div class="admin-field">
+                <label for="name">Product name *</label>
+
+                <input id="name"
+                       type="text"
+                       th:field="*{name}"
+                       placeholder="e.g. Fresh Avocado"
+                       required
+                       maxlength="150">
+            </div>
+
+            <!-- Category -->
+            <div class="admin-field">
+                <label for="category">Category *</label>
+
+                <select id="category"
+                        th:field="*{category}"
+                        required>
+
+                    <option value="">Choose a category</option>
+                    <option value="Fruits">Fruits</option>
+                    <option value="Vegetables">Vegetables</option>
+                    <option value="Dairy">Dairy</option>
+                    <option value="Bakery">Bakery</option>
+                    <option value="Meat">Meat</option>
+                    <option value="Seafood">Seafood</option>
+                    <option value="Pantry">Pantry</option>
+                    <option value="Beverages">Beverages</option>
+                    <option value="Other">Other</option>
+
+                </select>
+            </div>
+
+            <!-- Description -->
+            <div class="admin-field admin-field-full">
+                <label for="description">Description</label>
+
+                <textarea id="description"
+                          th:field="*{description}"
+                          rows="4"
+                          maxlength="1000"
+                          placeholder="Describe the product"></textarea>
+            </div>
+
+            <!-- Selling Price -->
+            <div class="admin-field">
+                <label for="price">Selling price (Rs.) *</label>
+
+                <input id="price"
+                       type="number"
+                       th:field="*{price}"
+                       min="0.01"
+                       step="0.01"
+                       placeholder="350.00"
+                       required>
+            </div>
+
+            <!-- Original Price -->
+            <div class="admin-field">
+                <label for="originalPrice">Original price (Rs.)</label>
+
+                <input id="originalPrice"
+                       type="number"
+                       th:field="*{originalPrice}"
+                       min="0.01"
+                       step="0.01"
+                       placeholder="Leave empty if no discount">
+            </div>
+
+            <!-- Product Image -->
+            <div class="admin-field admin-field-full">
+
+                <label for="imageFile">Product image</label>
+
+                <input id="imageFile"
+                       type="file"
+                       name="imageFile"
+                       accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
+
+                <small>
+                    Upload a JPG, PNG or WebP image. Maximum 5 MB.
+                </small>
+
+                <!-- Existing image when editing -->
+                <div th:if="${product.imagePath != null and !product.imagePath.isEmpty()}"
+                     style="margin-top: 12px;">
+
+                    <p style="margin-bottom: 8px;">
+                        Current image:
+                    </p>
+
+                    <img th:src="${product.imagePath}"
+                         th:alt="${product.name}"
+                         style="width: 150px;
+                                height: 120px;
+                                object-fit: cover;
+                                border-radius: 10px;">
+                </div>
+
+            </div>
+
+            <!-- Emoji Fallback -->
+            <div class="admin-field">
+                <label for="imageEmoji">Product emoji</label>
+
+                <input id="imageEmoji"
+                       type="text"
+                       th:field="*{imageEmoji}"
+                       maxlength="20"
+                       placeholder="🥑">
+            </div>
+
+            <!-- Stock -->
+            <div class="admin-field">
+                <label for="stockQuantity">Stock quantity *</label>
+
+                <input id="stockQuantity"
+                       type="number"
+                       th:field="*{stockQuantity}"
+                       min="0"
+                       step="1"
+                       required>
+            </div>
+
+            <!-- Active -->
+            <div class="admin-field admin-field-full admin-checkbox-field">
+
+                <input id="active"
+                       type="checkbox"
+                       th:field="*{active}">
+
+                <label for="active">
+                    Show this product on the storefront
+                </label>
+
+            </div>
+
+        </div>
+
+        <!-- Buttons -->
+        <div class="admin-form-actions">
+
+            <a th:href="@{/admin/products}"
+               class="admin-cancel-button">
+                Cancel
+            </a>
+
+            <button type="submit"
+                    class="primary-button">
+                Save Product
+            </button>
+
+        </div>
+
+    </form>
+
+</main>
+
+</body>
+</html>

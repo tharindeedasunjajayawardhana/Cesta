@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account | Cesta Basket</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="account-page">
+
+<header class="customer-header">
+    <div class="brand">Cesta Basket</div>
+    <a th:href="@{/}">Home</a>
+</header>
+
+<main class="account-container">
+    <section class="account-card">
+        <h1>My Account</h1>
+        <p>Welcome, <strong th:text="${customer.fullName}">Customer</strong>!</p>
+        <p>Manage your account and continue shopping with Cesta Basket.</p>
+    </section>
+
+    <section class="account-card">
+        <h2>Personal Details</h2>
+
+        <div class="account-detail">
+            <span class="account-label">Full name</span>
+            <span class="account-value" th:text="${customer.fullName}">Customer name</span>
+        </div>
+
+        <div class="account-detail">
+            <span class="account-label">Email address</span>
+            <span class="account-value" th:text="${customer.email}">customer@example.com</span>
+        </div>
+
+        <div class="account-detail">
+            <span class="account-label">Phone number</span>
+            <span class="account-value" th:text="${customer.phone}">Phone number</span>
+        </div>
+
+        <div class="account-actions">
+            <a class="customer-button" th:href="@{/}">Continue Shopping</a>
+            <a class="customer-button secondary" th:href="@{/orders}">My Orders</a>
+
+            <form class="logout-form" th:action="@{/logout}" method="post">
+                <button class="customer-button secondary" type="submit">Log Out</button>
+            </form>
+        </div>
+    </section>
+</main>
+
+</body>
+</html>

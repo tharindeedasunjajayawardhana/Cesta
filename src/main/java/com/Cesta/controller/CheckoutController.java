@@ -1,0 +1,259 @@
+
+package com.Cesta.controller;
+
+import com.Cesta.model.Customer;
+import com.Cesta.model.CustomerOrder;
+import com.Cesta.model.OrderItem;
+import com.Cesta.model.Product;
+import com.Cesta.repository.CustomerOrderRepository;
+import com.Cesta.repository.CustomerRepository;
+import com.Cesta.repository.ProductRepository;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.math.BigDecimal;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+@Controller
+public class CheckoutController {
+
+    private static final String CART_KEY = "cestaCart";
+
+    private final CustomerRepository customerRepository;
+    private final ProductRepository productRepository;
+    private final CustomerOrderRepository customerOrderRepository;
+
+    public CheckoutController(
+            CustomerRepository customerRepository,
+            ProductRepository productRepository,
+            CustomerOrderRepository customerOrderRepository) {
+        this.customerRepository = customerRepository;
+        this.productRepository = productRepository;
+        this.customerOrderRepository = customerOrderRepository;
+    }
+
+    @GetMapping("/checkout")
+    public String showCheckout(HttpSession session, Model model) {
+        Long customerId = getCustomerId(session);
+
+        if (customerId == null) {
+            return "redirect:/login";
+        }
+
+        Map<Long, Integer> cart = getCart(session);
+
+        if (cart.isEmpty()) {
+            return "redirect:/cart";
+        }
+
+        Customer customer = customerRepository.findById(customerId)
+                .orElse(null);
+
+        if (customer == null) {
+            session.removeAttribute("cestaCustomerId");
+            return "redirect:/login";
+        }
+
+        BigDecimal subtotal = calculateSubtotal(cart);
+
+        model.addAttribute("customer", customer);
+        model.addAttribute("subtotal", subtotal);
+        model.addAttribute("total", subtotal);
+        model.addAttribute("checkoutMessage",
+                model.asMap().get("checkoutMessage"));
+
+        return "checkout";
+    }
+
+    @PostMapping("/checkout/place-order")
+    @Transactional
+    public String placeOrder(
+            @RequestParam String deliveryName,
+            @RequestParam String deliveryPhone,
+            @RequestParam String deliveryAddress,
+            @RequestParam String deliveryCity,
+            @RequestParam(required = false, defaultValue = "") String deliveryPostalCode,
+            @RequestParam String paymentMethod,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
+
+        Long customerId = getCustomerId(session);
+
+        if (customerId == null) {
+            return "redirect:/login";
+        }
+
+        Map<Long, Integer> cart = getCart(session);
+
+        if (cart.isEmpty()) {
+            return "redirect:/cart";
+        }
+
+        Customer customer = customerRepository.findById(customerId)
+                .orElse(null);
+
+        if (customer == null) {
+            return "redirect:/login";
+        }
+
+        if (isBlank(deliveryName) || isBlank(deliveryPhone)
+                || isBlank(deliveryAddress) || isBlank(deliveryCity)) {
+            redirectAttributes.addFlashAttribute(
+                    "checkoutMessage",
+                    "Please complete all required delivery details."
+            );
+            return "redirect:/checkout";
+        }
+
+        // Online payment is not connected to a payment gateway yet.
+        if (!"CASH_ON_DELIVERY".equals(paymentMethod)) {
+            redirectAttributes.addFlashAttribute(
+                    "checkoutMessage",
+                    "Online payment is not available yet. Please choose Cash on Delivery."
+            );
+            return "redirect:/checkout";
+        }
+
+        BigDecimal subtotal = BigDecimal.ZERO;
+        Map<Product, Integer> productsToOrder = new LinkedHashMap<>();
+
+        // Always retrieve prices from the database, not from the browser.
+        for (Map.Entry<Long, Integer> entry : cart.entrySet()) {
+            Product product = productRepository.findById(entry.getKey())
+                    .orElse(null);
+
+            if (product == null) {
+                redirectAttributes.addFlashAttribute(
+                        "checkoutMessage",
+                        "A product in your cart is no longer available. Please review your cart."
+                );
+                return "redirect:/cart";
+            }
+
+            int quantity = entry.getValue();
+
+            if (quantity < 1 || quantity > 99) {
+                redirectAttributes.addFlashAttribute(
+                        "checkoutMessage",
+                        "One of the quantities in your cart is invalid."
+                );
+                return "redirect:/cart";
+            }
+
+            productsToOrder.put(product, quantity);
+
+            subtotal = subtotal.add(
+                    product.getPrice().multiply(BigDecimal.valueOf(quantity))
+            );
+        }
+
+        CustomerOrder order = new CustomerOrder();
+        order.setCustomer(customer);
+        order.setSubtotal(subtotal);
+        order.setTotal(subtotal);
+        order.setStatus("PLACED");
+        order.setDeliveryName(deliveryName.trim());
+        order.setDeliveryPhone(deliveryPhone.trim());
+        order.setDeliveryAddress(deliveryAddress.trim());
+        order.setDeliveryCity(deliveryCity.trim());
+        order.setDeliveryPostalCode(deliveryPostalCode.trim());
+        order.setPaymentMethod("CASH_ON_DELIVERY");
+
+        for (Map.Entry<Product, Integer> entry : productsToOrder.entrySet()) {
+            Product product = entry.getKey();
+            int quantity = entry.getValue();
+
+            OrderItem item = new OrderItem();
+            item.setProductId(product.getId());
+            item.setProductName(product.getName());
+            item.setQuantity(quantity);
+            item.setUnitPrice(product.getPrice());
+            item.setLineTotal(
+                    product.getPrice().multiply(BigDecimal.valueOf(quantity))
+            );
+            item.setOrder(order);
+
+            order.addItem(item);
+        }
+
+        CustomerOrder savedOrder = customerOrderRepository.save(order);
+
+        // Empty the session cart only after the order has been saved.
+        session.setAttribute(CART_KEY, new LinkedHashMap<Long, Integer>());
+
+        return "redirect:/order-confirmation/" + savedOrder.getId();
+    }
+
+    @GetMapping("/order-confirmation/{id}")
+    public String showConfirmation(
+            @PathVariable Long id,
+            HttpSession session,
+            Model model) {
+
+        Long customerId = getCustomerId(session);
+
+        if (customerId == null) {
+            return "redirect:/login";
+        }
+
+        CustomerOrder order = customerOrderRepository
+                .findByIdAndCustomerId(id, customerId)
+                .orElse(null);
+
+        if (order == null) {
+            return "redirect:/orders";
+        }
+
+        model.addAttribute("order", order);
+        return "order-confirmation";
+    }
+
+    private BigDecimal calculateSubtotal(Map<Long, Integer> cart) {
+        BigDecimal subtotal = BigDecimal.ZERO;
+
+        for (Map.Entry<Long, Integer> entry : cart.entrySet()) {
+            Product product = productRepository.findById(entry.getKey())
+                    .orElse(null);
+
+            if (product != null && entry.getValue() > 0) {
+                subtotal = subtotal.add(
+                        product.getPrice()
+                                .multiply(BigDecimal.valueOf(entry.getValue()))
+                );
+            }
+        }
+
+        return subtotal;
+    }
+
+    private Long getCustomerId(HttpSession session) {
+        Object value = session.getAttribute("cestaCustomerId");
+        return value instanceof Long ? (Long) value : null;
+    }
+
+    @SuppressWarnings("unchecked")
+    private Map<Long, Integer> getCart(HttpSession session) {
+        Object value = session.getAttribute(CART_KEY);
+
+        if (value instanceof Map<?, ?>) {
+            return (Map<Long, Integer>) value;
+        }
+
+        Map<Long, Integer> cart = new LinkedHashMap<>();
+        session.setAttribute(CART_KEY, cart);
+        return cart;
+    }
+
+    private boolean isBlank(String value) {
+        return value == null || value.trim().isEmpty();
+    }
+}
+

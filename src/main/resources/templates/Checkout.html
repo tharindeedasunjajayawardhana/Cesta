@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | Cesta Basket</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header class="site-header">
+    <div class="navbar">
+        <a th:href="@{/}" class="logo">
+            <span class="logo-icon">🧺</span>
+            <span>Cesta<span class="logo-dot">.</span></span>
+        </a>
+        <nav class="main-nav">
+            <a th:href="@{/}">Home</a>
+            <a th:href="@{/cart}">My Cart</a>
+        </nav>
+    </div>
+</header>
+
+<main class="checkout-page">
+    <h1>Checkout</h1>
+    <p>You're one step away from completing your basket.</p>
+
+    <p class="checkout-error"
+       th:if="${checkoutMessage}"
+       th:text="${checkoutMessage}"></p>
+
+    <div class="checkout-layout">
+        <form class="checkout-card checkout-form"
+              th:action="@{/checkout/place-order}"
+              method="post">
+
+            <h2>1. Delivery details</h2>
+
+            <label for="deliveryName">Full name *</label>
+            <input id="deliveryName" type="text" name="deliveryName"
+                   th:value="${customer.fullName}" maxlength="120"
+                   autocomplete="name" required>
+
+            <label for="deliveryPhone">Phone number *</label>
+            <input id="deliveryPhone" type="tel" name="deliveryPhone"
+                   th:value="${customer.phone}" maxlength="30"
+                   autocomplete="tel" required>
+
+            <label for="deliveryAddress">Delivery address *</label>
+            <input id="deliveryAddress" type="text" name="deliveryAddress"
+                   th:value="${customer.address}" maxlength="255"
+                   autocomplete="street-address" required>
+
+            <label for="deliveryCity">City *</label>
+            <input id="deliveryCity" type="text" name="deliveryCity"
+                   th:value="${customer.city}" maxlength="100"
+                   autocomplete="address-level2" required>
+
+            <label for="deliveryPostalCode">Postal code</label>
+            <input id="deliveryPostalCode" type="text" name="deliveryPostalCode"
+                   th:value="${customer.postalCode}" maxlength="20"
+                   autocomplete="postal-code">
+
+            <h2 class="checkout-section-heading">2. Payment method</h2>
+
+            <div class="payment-option">
+                <input id="cashOnDelivery" type="radio"
+                       name="paymentMethod" value="CASH_ON_DELIVERY"
+                       checked required>
+                <label for="cashOnDelivery">
+                    Cash on Delivery
+                    <p>Pay when your groceries are delivered.</p>
+                </label>
+            </div>
+
+            <div class="payment-option payment-disabled">
+                <input id="onlinePayment" type="radio" disabled>
+                <label for="onlinePayment">
+                    Online payment
+                    <p>Not available yet. A payment gateway must be connected first.</p>
+                </label>
+            </div>
+
+            <button type="submit" class="checkout-button">Place Order →</button>
+            <a th:href="@{/cart}" class="back-link">← Return to cart</a>
+        </form>
+
+        <aside class="checkout-card checkout-summary">
+            <h2>Order summary</h2>
+
+            <div class="summary-row">
+                <span>Subtotal</span>
+                <strong>
+                    Rs.
+                    <span th:text="${#numbers.formatDecimal(subtotal, 1, 'COMMA', 2, 'POINT')}">0.00</span>
+                </strong>
+            </div>
+
+            <div class="summary-row">
+                <span>Delivery</span>
+                <span>To be confirmed</span>
+            </div>
+
+            <div class="summary-row summary-total">
+                <span>Order total*</span>
+                <strong>
+                    Rs.
+                    <span th:text="${#numbers.formatDecimal(total, 1, 'COMMA', 2, 'POINT')}">0.00</span>
+                </strong>
+            </div>
+
+            <p class="checkout-note">
+                *The current total is the product subtotal. Any delivery fee
+                must be configured before it is added to the final order.
+            </p>
+        </aside>
+    </div>
+</main>
+
+</body>
+</html>
