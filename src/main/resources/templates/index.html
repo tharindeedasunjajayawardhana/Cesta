@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
@@ -35,6 +34,13 @@
         <div class="nav-actions">
             <a href="/cart" class="nav-shop-button">My Cart</a>
             <a href="#products" class="nav-shop-button">Shop now</a>
+
+            <!-- Visible only to logged-in administrators -->
+            <a th:if="${session.cestaRole == 'ADMIN'}"
+               th:href="@{/admin/orders}"
+               class="nav-shop-button">
+                Admin Dashboard
+            </a>
         </div>
 
     </div>
@@ -214,7 +220,6 @@
 
                     </div>
 
-                    <!-- WORKING ADD TO CART FORM -->
                     <form th:action="@{/cart/add}" method="post">
 
                         <input type="hidden"
@@ -318,7 +323,6 @@
 
                 </div>
 
-                <!-- WORKING ADD TO CART FORM -->
                 <form th:action="@{/cart/add}" method="post">
 
                     <input type="hidden"

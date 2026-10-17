@@ -40,6 +40,11 @@
         </div>
 
         <div class="account-actions">
+            <a class="customer-button"
+            th:if="${session.cestaRole == 'ADMIN'}"
+            th:href="@{/admin/orders}">
+                Admin Dashboard
+            </a>
             <a class="customer-button" th:href="@{/}">Continue Shopping</a>
             <a class="customer-button secondary" th:href="@{/orders}">My Orders</a>
 
