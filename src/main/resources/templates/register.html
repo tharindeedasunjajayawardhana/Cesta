@@ -4,57 +4,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Create Account | Cesta Basket</title>
+
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body class="auth-page">
 
 <header class="customer-header">
-    <div class="brand">Cesta Basket</div>
+    <a th:href="@{/}" class="brand">Cesta Basket</a>
 </header>
 
 <main class="auth-container register-container">
+
     <h1>Create your account</h1>
-    <p class="auth-subtitle">Join Cesta Basket to shop and track your orders.</p>
 
-    <form th:action="@{/register}" th:object="${registrationForm}" method="post">
+    <p class="auth-subtitle">
+        Join Cesta Basket to shop and track your orders.
+    </p>
 
-        <div th:if="${#fields.hasGlobalErrors()}" class="auth-message failure">
-            <p th:each="error : ${#fields.globalErrors()}" th:text="${error}"></p>
+    <form th:action="@{/register}"
+          th:object="${registrationForm}"
+          method="post">
+
+        <div th:if="${#fields.hasGlobalErrors()}"
+             class="auth-message failure">
+
+            <p th:each="error : ${#fields.globalErrors()}"
+               th:text="${error}">
+            </p>
+
         </div>
 
         <label for="fullName">Full name</label>
-        <input id="fullName" type="text" th:field="*{fullName}"
-               autocomplete="name" placeholder="Enter your full name" required>
-        <div class="auth-error" th:if="${#fields.hasErrors('fullName')}"
-             th:errors="*{fullName}"></div>
+
+        <input
+            id="fullName"
+            type="text"
+            th:field="*{fullName}"
+            autocomplete="name"
+            placeholder="Enter your full name"
+            required
+        >
+
+        <div class="auth-error"
+             th:if="${#fields.hasErrors('fullName')}"
+             th:errors="*{fullName}">
+        </div>
 
         <label for="email">Email address</label>
-        <input id="email" type="email" th:field="*{email}"
-               autocomplete="email" placeholder="you@example.com" required>
-        <div class="auth-error" th:if="${#fields.hasErrors('email')}"
-             th:errors="*{email}"></div>
+
+        <input
+            id="email"
+            type="email"
+            th:field="*{email}"
+            autocomplete="email"
+            placeholder="you@example.com"
+            required
+        >
+
+        <div class="auth-error"
+             th:if="${#fields.hasErrors('email')}"
+             th:errors="*{email}">
+        </div>
 
         <label for="phone">Phone number</label>
-        <input id="phone" type="tel" th:field="*{phone}"
-               autocomplete="tel" placeholder="Enter your phone number" required>
-        <div class="auth-error" th:if="${#fields.hasErrors('phone')}"
-             th:errors="*{phone}"></div>
+
+        <input
+            id="phone"
+            type="tel"
+            th:field="*{phone}"
+            autocomplete="tel"
+            placeholder="Enter your phone number"
+            required
+        >
+
+        <div class="auth-error"
+             th:if="${#fields.hasErrors('phone')}"
+             th:errors="*{phone}">
+        </div>
 
         <label for="password">Password</label>
-        <input id="password" type="password" th:field="*{password}"
-               autocomplete="new-password" minlength="8" maxlength="72"
-               placeholder="At least 8 characters" required>
-        <div class="auth-error" th:if="${#fields.hasErrors('password')}"
-             th:errors="*{password}"></div>
 
-        <button type="submit" class="auth-button">Create Account</button>
+        <input
+            id="password"
+            type="password"
+            th:field="*{password}"
+            autocomplete="new-password"
+            minlength="8"
+            maxlength="72"
+            placeholder="At least 8 characters"
+            required
+        >
+
+        <div class="auth-error"
+             th:if="${#fields.hasErrors('password')}"
+             th:errors="*{password}">
+        </div>
+
+        <button type="submit" class="auth-button">
+            Create Account
+        </button>
+
     </form>
 
     <p class="auth-footer">
-        Already have an account? <a th:href="@{/login}">Log in</a>
+        Already have an account?
+        <a th:href="@{/login}">Log in</a>
     </p>
-    <p class="auth-footer"><a th:href="@{/}">Back to home</a></p>
+
+    <p class="auth-footer">
+        <a th:href="@{/}">Back to home</a>
+    </p>
+
 </main>
 
 </body>

@@ -1571,12 +1571,13 @@ body.account-page {
     line-height: 1.6;
 }
 
+
 /* ==========================================
    CUSTOMER — LOGIN AND REGISTRATION
    ========================================== */
 
-body.registration,
-body.login-page {
+/* Shared page styles */
+body.auth-page {
     min-height: 100vh;
     margin: 0;
     padding: 0;
@@ -1587,8 +1588,8 @@ body.login-page {
     font-family: Arial, sans-serif;
 }
 
-/* Header */
-body.login-page .customer-header {
+/* Shared header */
+body.auth-page .customer-header {
     width: 100%;
     padding: 20px 7%;
     box-sizing: border-box;
@@ -1596,7 +1597,7 @@ body.login-page .customer-header {
     color: #ffffff;
 }
 
-body.login-page .brand {
+body.auth-page .brand {
     display: inline-block;
     color: #ffffff;
     font-size: 25px;
@@ -1604,8 +1605,8 @@ body.login-page .brand {
     letter-spacing: 0.5px;
 }
 
-/* Login card */
-body.login-page .auth-container {
+/* Shared authentication card */
+body.auth-page .auth-container {
     width: calc(100% - 40px);
     max-width: 430px;
     box-sizing: border-box;
@@ -1617,14 +1618,20 @@ body.login-page .auth-container {
     box-shadow: 0 10px 30px rgba(36, 75, 53, 0.12);
 }
 
-body.login-page .auth-container h1 {
+/* Registration card is wider because it has more fields */
+body.auth-page .auth-container.register-container {
+    max-width: 520px;
+}
+
+/* Heading and subtitle */
+body.auth-page .auth-container h1 {
     margin: 0 0 10px;
     color: #244b35;
     font-size: 30px;
     text-align: center;
 }
 
-body.login-page .auth-subtitle {
+body.auth-page .auth-subtitle {
     margin: 0 0 28px;
     color: #777c72;
     font-size: 15px;
@@ -1632,21 +1639,21 @@ body.login-page .auth-subtitle {
     line-height: 1.6;
 }
 
-/* Form */
-body.login-page .auth-container form {
+/* Form layout */
+body.auth-page .auth-container form {
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
 
-body.login-page .auth-container form label {
+body.auth-page .auth-container form label {
     margin-top: 5px;
     color: #282d26;
     font-size: 14px;
     font-weight: 600;
 }
 
-body.login-page .auth-container form input {
+body.auth-page .auth-container form input {
     width: 100%;
     box-sizing: border-box;
     padding: 13px 14px;
@@ -1657,42 +1664,43 @@ body.login-page .auth-container form input {
     font-size: 15px;
 }
 
-body.login-page .auth-container form input:focus {
+body.auth-page .auth-container form input:focus {
     outline: none;
     border-color: #244b35;
     box-shadow: 0 0 0 3px rgba(36, 75, 53, 0.12);
 }
 
-body.login-page .auth-container form input::placeholder {
+body.auth-page .auth-container form input::placeholder {
     color: #777c72;
 }
 
-/* Validation and feedback messages */
-body.login-page .auth-error {
+/* Validation messages */
+body.auth-page .auth-error {
     margin-top: -5px;
     color: #a52822;
     font-size: 13px;
 }
 
-body.login-page .auth-message {
+/* Success and failure messages */
+body.auth-page .auth-message {
     margin-bottom: 18px;
     padding: 12px 14px;
     border-radius: 8px;
     font-size: 14px;
 }
 
-body.login-page .auth-message.success {
+body.auth-page .auth-message.success {
     background: #e5f4e8;
     color: #216e39;
 }
 
-body.login-page .auth-message.failure {
+body.auth-page .auth-message.failure {
     background: #fde8e7;
     color: #a52822;
 }
 
-/* Login button */
-body.login-page .auth-container .auth-button {
+/* Shared submit button */
+body.auth-page .auth-container .auth-button {
     width: 100%;
     margin-top: 12px;
     padding: 14px;
@@ -1706,12 +1714,12 @@ body.login-page .auth-container .auth-button {
     transition: background 0.2s;
 }
 
-body.login-page .auth-container .auth-button:hover {
+body.auth-page .auth-container .auth-button:hover {
     background: #193725;
 }
 
 /* Footer links */
-body.login-page .auth-footer {
+body.auth-page .auth-footer {
     margin: 22px 0 0;
     color: #777c72;
     font-size: 14px;
@@ -1719,33 +1727,33 @@ body.login-page .auth-footer {
     line-height: 1.6;
 }
 
-body.login-page .auth-footer a {
+body.auth-page .auth-footer a {
     color: #244b35;
     font-weight: 600;
     text-decoration: none;
 }
 
-body.login-page .auth-footer a:hover {
+body.auth-page .auth-footer a:hover {
     text-decoration: underline;
 }
 
-/* Mobile */
+/* Authentication pages on mobile */
 @media (max-width: 480px) {
-    body.login-page .customer-header {
+    body.auth-page .customer-header {
         padding: 18px 20px;
     }
 
-    body.login-page .brand {
+    body.auth-page .brand {
         font-size: 22px;
     }
 
-    body.login-page .auth-container {
+    body.auth-page .auth-container {
         width: calc(100% - 30px);
         margin: 35px auto;
         padding: 25px 20px;
     }
 
-    body.login-page .auth-container h1 {
+    body.auth-page .auth-container h1 {
         font-size: 26px;
     }
 }
