@@ -33,10 +33,14 @@ public class Customer {
     @Column(length = 20)
     private String postalCode;
 
+    @Column(length = 20)
+    private String role = "CUSTOMER";
+
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    public Customer() {}
+    public Customer() {
+    }
 
     public Long getId() {
         return id;
@@ -56,7 +60,8 @@ public class Customer {
 
     public void setEmail(String email) {
         this.email = email == null
-                ? null : email.trim().toLowerCase();
+                ? null
+                : email.trim().toLowerCase();
     }
 
     public String getPasswordHash() {
@@ -97,6 +102,18 @@ public class Customer {
 
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
+    }
+
+    public String getRole() {
+        return role == null || role.isBlank()
+                ? "CUSTOMER"
+                : role.trim().toUpperCase();
+    }
+
+    public void setRole(String role) {
+        this.role = role == null || role.isBlank()
+                ? "CUSTOMER"
+                : role.trim().toUpperCase();
     }
 
     public LocalDateTime getCreatedAt() {

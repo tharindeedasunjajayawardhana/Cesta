@@ -1,0 +1,159 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | Order Details</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header class="site-header">
+    <div class="navbar">
+        <a href="/" class="logo">
+            <span class="logo-icon">🧺</span>
+            <span>Cesta<span class="logo-dot">.</span></span>
+        </a>
+        <nav>
+            <a href="/admin/orders">All orders</a>
+            <a href="/admin/products">Products</a>
+        </nav>
+    </div>
+</header>
+
+<main class="admin-page admin-order-detail-page">
+    <p>
+        <a th:href="@{/admin/orders}" class="admin-back-link">
+            ← Back to all orders
+        </a>
+    </p>
+
+    <div class="admin-heading">
+        <div>
+            <p class="eyebrow">ORDER DETAILS</p>
+            <h1>Order #<span th:text="${order.id}">1</span></h1>
+            <p>
+                Placed:
+                <span th:text="${order.createdAt}">Order date</span>
+            </p>
+        </div>
+    </div>
+
+    <p class="admin-success"
+       th:if="${successMessage}"
+       th:text="${successMessage}"></p>
+
+    <p class="admin-error"
+       th:if="${errorMessage}"
+       th:text="${errorMessage}"></p>
+
+    <section class="admin-order-card">
+        <h2>Update order status</h2>
+
+        <p>
+            Current status:
+            <strong th:text="${order.status}">PLACED</strong>
+        </p>
+
+        <form class="admin-status-form"
+              th:action="@{/admin/orders/{id}/status(id=${order.id})}"
+              method="post">
+
+            <label for="status">New status</label>
+
+            <select id="status" name="status" required>
+                <option th:each="statusOption : ${statuses}"
+                        th:value="${statusOption}"
+                        th:text="${statusOption}"
+                        th:selected="${statusOption == order.status}">
+                    PLACED
+                </option>
+            </select>
+
+            <button class="primary-button" type="submit">
+                Save status
+            </button>
+        </form>
+    </section>
+
+    <section class="admin-order-card">
+        <h2>Customer details</h2>
+
+        <p>
+            <strong>Name:</strong>
+            <span th:text="${order.customer.fullName}">Customer name</span>
+        </p>
+        <p>
+            <strong>Email:</strong>
+            <span th:text="${order.customer.email}">customer@example.com</span>
+        </p>
+        <p>
+            <strong>Delivery phone:</strong>
+            <span th:text="${order.deliveryPhone}">Phone</span>
+        </p>
+        <p>
+            <strong>Delivery address:</strong>
+            <span th:text="${order.deliveryAddress}">Address</span>
+        </p>
+        <p>
+            <strong>City:</strong>
+            <span th:text="${order.deliveryCity}">City</span>
+        </p>
+        <p>
+            <strong>Postal code:</strong>
+            <span th:text="${order.deliveryPostalCode}">Postal code</span>
+        </p>
+        <p>
+            <strong>Payment:</strong>
+            <span th:text="${order.paymentMethod}">CASH_ON_DELIVERY</span>
+        </p>
+    </section>
+
+    <section class="admin-order-card">
+        <h2>Items ordered</h2>
+
+        <div class="admin-table-wrapper">
+            <table class="admin-table">
+                <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Unit price</th>
+                    <th>Line total</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item : ${order.items}">
+                    <td th:text="${item.productName}">Product name</td>
+                    <td th:text="${item.quantity}">1</td>
+                    <td th:text="${'Rs. ' + #numbers.formatDecimal(item.unitPrice, 1, 'COMMA', 2, 'POINT')}">
+                        Rs. 100.00
+                    </td>
+                    <td th:text="${'Rs. ' + #numbers.formatDecimal(item.lineTotal, 1, 'COMMA', 2, 'POINT')}">
+                        Rs. 100.00
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="admin-order-total">
+            <p>
+                Subtotal:
+                <strong th:text="${'Rs. ' + #numbers.formatDecimal(order.subtotal, 1, 'COMMA', 2, 'POINT')}">
+                    Rs. 100.00
+                </strong>
+            </p>
+            <p>
+                Total:
+                <strong th:text="${'Rs. ' + #numbers.formatDecimal(order.total, 1, 'COMMA', 2, 'POINT')}">
+                    Rs. 100.00
+                </strong>
+            </p>
+        </div>
+    </section>
+</main>
+
+</body>
+</html>

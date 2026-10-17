@@ -1,3 +1,4 @@
+
 package com.Cesta.repository;
 
 import com.Cesta.model.CustomerOrder;
@@ -11,11 +12,19 @@ public interface CustomerOrderRepository
         extends JpaRepository<CustomerOrder, Long> {
 
     @EntityGraph(attributePaths = "items")
-    List<CustomerOrder> findByCustomerIdOrderByCreatedAtDesc(Long customerId);
+    List<CustomerOrder> findByCustomerIdOrderByCreatedAtDesc(
+            Long customerId
+    );
 
     @EntityGraph(attributePaths = "items")
     Optional<CustomerOrder> findByIdAndCustomerId(
             Long orderId,
             Long customerId
     );
+
+    @EntityGraph(attributePaths = {"items", "customer"})
+    List<CustomerOrder> findAllByOrderByCreatedAtDesc();
+
+    @EntityGraph(attributePaths = {"items", "customer"})
+    Optional<CustomerOrder> findWithCustomerAndItemsById(Long id);
 }
