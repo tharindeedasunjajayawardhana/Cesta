@@ -2665,3 +2665,300 @@ body.orders-page {
         transition-duration: 0.01ms !important;
     }
 }
+
+
+/* ==========================================
+   CUSTOMER — MY ACCOUNT (MATCHES account.html)
+   Scoped to the account page so order-page styling
+   and other customer screens remain unchanged.
+   ========================================== */
+
+body.account-page {
+    min-height: 100vh;
+    background:
+        radial-gradient(ellipse at top left, rgba(226, 236, 218, 0.72), transparent 42%),
+        var(--customer-bg);
+    color: #26382d;
+}
+
+.account-page .customer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 20px max(5%, calc((100% - 1120px) / 2));
+    background: #254d38;
+    color: #fff;
+    box-shadow: 0 4px 18px rgba(25, 55, 37, 0.12);
+}
+
+.account-page .customer-header .brand {
+    color: #fff;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(22px, 3vw, 28px);
+    font-weight: 700;
+    letter-spacing: -0.4px;
+}
+
+.account-page .customer-header > a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 9px 15px;
+    border: 1px solid rgba(255, 255, 255, 0.32);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 650;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.account-page .customer-header > a:hover {
+    border-color: rgba(255, 255, 255, 0.65);
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateY(-1px);
+}
+
+.account-page .account-container {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: stretch;
+    gap: 24px;
+    width: min(1120px, calc(100% - 48px));
+    margin: 48px auto 72px;
+    padding: 0;
+}
+
+.account-page .account-card {
+    min-width: 0;
+    padding: clamp(24px, 3.2vw, 38px);
+    border: 1px solid #e1e8dd;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 12px 34px rgba(36, 75, 53, 0.07);
+}
+
+.account-page .account-card:first-child {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-color: #254d38;
+    background: linear-gradient(145deg, #28563c 0%, #193725 100%);
+    color: #fff;
+    overflow: hidden;
+    position: relative;
+    isolation: isolate;
+}
+
+.account-page .account-card:first-child::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    right: -72px;
+    bottom: -94px;
+    width: 245px;
+    height: 245px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 50%;
+    box-shadow: 0 0 0 26px rgba(255, 255, 255, 0.035), 0 0 0 54px rgba(255, 255, 255, 0.025);
+}
+
+.account-page .account-card h1 {
+    margin: 0 0 18px;
+    color: #fff;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(32px, 4vw, 43px);
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.8px;
+}
+
+.account-page .account-card:first-child p {
+    position: relative;
+    z-index: 1;
+    margin-top: 10px;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.account-page .account-card:first-child p strong {
+    color: #fff;
+    font-weight: 750;
+}
+
+.account-page .account-card h2 {
+    margin: 0 0 23px;
+    color: #254d38;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 26px;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.account-page .account-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 17px 0;
+    border-bottom: 1px solid #e8ede5;
+}
+
+.account-page .account-detail:first-of-type {
+    padding-top: 3px;
+}
+
+.account-page .account-detail:last-of-type {
+    border-bottom: 0;
+}
+
+.account-page .account-label {
+    color: #718071;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.account-page .account-value {
+    color: #28392e;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.65;
+    overflow-wrap: anywhere;
+}
+
+.account-page .account-actions {
+    display: flex;
+    align-items: stretch;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 28px;
+}
+
+.account-page .customer-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 11px 16px;
+    border: 1px solid #28583c;
+    border-radius: 8px;
+    background: #28583c;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 750;
+    line-height: 1.4;
+    text-align: center;
+    transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.account-page .customer-button:hover {
+    border-color: #193725;
+    background: #193725;
+    box-shadow: 0 5px 12px rgba(25, 55, 37, 0.12);
+    transform: translateY(-1px);
+}
+
+.account-page .customer-button.secondary {
+    border-color: #d9e4d5;
+    background: #edf3e9;
+    color: #28583c;
+}
+
+.account-page .customer-button.secondary:hover {
+    border-color: #c6d7c0;
+    background: #e1ebdc;
+}
+
+.account-page .logout-form {
+    display: flex;
+    margin: 0;
+}
+
+.account-page .logout-form button {
+    cursor: pointer;
+}
+
+@media (max-width: 760px) {
+    .account-page .account-container {
+        grid-template-columns: minmax(0, 1fr);
+        width: min(600px, calc(100% - 32px));
+        gap: 18px;
+        margin: 28px auto 48px;
+    }
+
+    .account-page .account-card:first-child {
+        min-height: 230px;
+    }
+
+    .account-page .account-card {
+        padding: 26px;
+    }
+
+    .account-page .account-card h1 {
+        font-size: 34px;
+    }
+
+    .account-page .account-card h2 {
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .account-page .customer-header {
+        padding: 16px 18px;
+    }
+
+    .account-page .customer-header .brand {
+        font-size: 22px;
+    }
+
+    .account-page .customer-header > a {
+        min-height: 38px;
+        padding: 8px 12px;
+    }
+
+    .account-page .account-container {
+        width: calc(100% - 28px);
+        margin: 20px auto 36px;
+    }
+
+    .account-page .account-card {
+        padding: 22px 20px;
+        border-radius: 14px;
+    }
+
+    .account-page .account-card:first-child {
+        min-height: 215px;
+    }
+
+    .account-page .account-card h1 {
+        font-size: 31px;
+    }
+
+    .account-page .account-card h2 {
+        margin-bottom: 17px;
+        font-size: 22px;
+    }
+
+    .account-page .account-value {
+        font-size: 14px;
+    }
+
+    .account-page .account-actions {
+        flex-direction: column;
+        gap: 9px;
+        margin-top: 22px;
+    }
+
+    .account-page .customer-button,
+    .account-page .logout-form {
+        width: 100%;
+    }
+
+    .account-page .logout-form .customer-button {
+        width: 100%;
+    }
+}
